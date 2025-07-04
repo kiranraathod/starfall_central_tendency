@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starfall: The Perfect Strategy</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;700&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+            font-family: 'Orbitron', monospace;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .scene-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .strategic-overview {
+            position: relative;
+            width: 95%;
+            height: 25%;
+            margin: 10px auto;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 0 50px rgba(212, 175, 55, 0.3),
+                inset 0 0 50px rgba(212, 175, 55, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .commander-message {
+            max-width: 800px;
+        }
+        
+        .commander-title {
+            color: #d4af37;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .commander-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+        
+        .strategy-report {
+            position: relative;
+            width: 95%;
+            height: 65%;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(135, 206, 235, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .report-header {
+            text-align: center;
+            color: #87ceeb;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        
+        .strategy-section {
+            background: rgba(20, 30, 50, 0.6);
+            border: 2px solid rgba(135, 206, 235, 0.4);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            color: #87ceeb;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .strategy-option {
+            background: rgba(30, 40, 60, 0.8);
+            border: 2px solid rgba(100, 150, 200, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .strategy-option:hover {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .strategy-option.selected {
+            border-color: #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+        
+        .strategy-option.correct {
+            border-color: #00ff00;
+            background: rgba(0, 255, 0, 0.2);
+        }
+        
+        .strategy-option.suboptimal {
+            border-color: #ff8c00;
+            background: rgba(255, 140, 0, 0.1);
+        }
+        
+        .strategy-option.poor {
+            border-color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+        
+        .option-label {
+            font-weight: 700;
+            color: #d4af37;
+            margin-bottom: 5px;
+        }
+        
+        .mean-label { color: #d4af37; }
+        .median-label { color: #4169e1; }
+        .mode-label { color: #22c55e; }
+        
+        .option-description {
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        .submit-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            background: rgba(100, 100, 100, 0.5);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .results-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .results-content {
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid rgba(212, 175, 55, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: center;
+        }
+        
+        .results-title {
+            color: #d4af37;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .score-display {
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .score-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #d4af37;
+        }
+        
+        .strategy-feedback {
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .feedback-section {
+            background: rgba(20, 30, 50, 0.6);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .feedback-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .cinematic-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .cinematic-content {
+            max-width: 800px;
+            padding: 40px;
+        }
+        
+        .cinematic-title {
+            color: #d4af37;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .cinematic-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+        
+        .commander-final {
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+        }
+        
+        .mission-complete {
+            color: #00ff00;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .continue-btn {
+            background: linear-gradient(45deg, #4169e1, #6495ed);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 15px 10px;
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(65, 105, 225, 0.4);
+        }
+        
+        @keyframes glow {
+            0% { text-shadow: 0 0 20px rgba(212, 175, 55, 0.8); }
+            100% { text-shadow: 0 0 30px rgba(212, 175, 55, 1), 0 0 40px rgba(212, 175, 55, 0.6); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="scene-container">
+        <!-- Strategic Overview -->
+        <div class="strategic-overview">
+            <div class="commander-message">
+                <div class="commander-title">Commander Rostova</div>
+                <div class="commander-text">
+                    "Analyst. I've heard from my head of science and my lead pilot. I have seen the pure math, the on-the-ground observations, and the logistical challenges. We've seen how a single new discovery can throw our plans into chaos. I am overriding my initial proposal. I need a final recommendation from you. Not just a location, but a <strong style="color: #d4af37;">strategy</strong>. Use all the data. Tell me what to do."
+                </div>
+            </div>
+        </div>
+        
+        <!-- Strategy Report -->
+        <div class="strategy-report">
+            <div class="report-header">Final Mission Strategy Report</div>
+            
+            <!-- Section 1: Main Base Location -->
+            <div class="strategy-section">
+                <div class="section-title">1. The Main Base Location should be the...</div>
+                <div class="option-group">
+                    <div class="strategy-option" data-section="base" data-value="mean">
+                        <div class="option-label mean-label">MEAN:</div>
+                        <div class="option-description">The mathematical center of all deposits.</div>
+                    </div>
+                    <div class="strategy-option" data-section="base" data-value="median">
+                        <div class="option-label median-label">MEDIAN:</div>
+                        <div class="option-description">The most robust and central logistical point.</div>
+                    </div>
+                    <div class="strategy-option" data-section="base" data-value="mode">
+                        <div class="option-label mode-label">MODE:</div>
+                        <div class="option-description">The site of the most common resources.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 2: First Mining Missions -->
+            <div class="strategy-section">
+                <div class="section-title">2. Our first mining missions should target the...</div>
+                <div class="option-group">
+                    <div class="strategy-option" data-section="missions" data-value="mean">
+                        <div class="option-label mean-label">MEAN:</div>
+                        <div class="option-description">To explore the general center of the valley.</div>
+                    </div>
+                    <div class="strategy-option" data-section="missions" data-value="median">
+                        <div class="option-label median-label">MEDIAN:</div>
+                        <div class="option-description">To set up mid-point supply caches.</div>
+                    </div>
+                    <div class="strategy-option" data-section="missions" data-value="mode">
+                        <div class="option-label mode-label">MODE:</div>
+                        <div class="option-description">To quickly gather a large number of easy-to-access crystals.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 3: Long-term Expansion -->
+            <div class="strategy-section">
+                <div class="section-title">3. Our long-term expansion plan should use the...</div>
+                <div class="option-group">
+                    <div class="strategy-option" data-section="expansion" data-value="mean">
+                        <div class="option-label mean-label">MEAN:</div>
+                        <div class="option-description">To understand the overall 'center of gravity' of all resources for future development.</div>
+                    </div>
+                    <div class="strategy-option" data-section="expansion" data-value="median">
+                        <div class="option-label median-label">MEDIAN:</div>
+                        <div class="option-description">To dictate the path of our main transport road.</div>
+                    </div>
+                    <div class="strategy-option" data-section="expansion" data-value="mode">
+                        <div class="option-label mode-label">MODE:</div>
+                        <div class="option-description">To establish specialized mining outposts.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="submit-container">
+                <button id="submitBtn" class="submit-btn" onclick="submitStrategy()" disabled>
+                    Submit Final Strategy
+                </button>
+            </div>
+        </div>
+        
+        <!-- Results Overlay -->
+        <div id="resultsOverlay" class="results-overlay">
+            <div class="results-content">
+                <div class="results-title">Strategy Analysis Complete</div>
+                <div class="score-display">
+                    <div class="score-text" id="scoreText">Strategy Score: 0/3</div>
+                </div>
+                <div class="strategy-feedback" id="strategyFeedback"></div>
+                <button class="continue-btn" onclick="showCinematic()">View Mission Outcome</button>
+            </div>
+        </div>
+        
+        <!-- Cinematic Ending -->
+        <div id="cinematicContainer" class="cinematic-container">
+            <div class="cinematic-content">
+                <div class="cinematic-title">Mission Success</div>
+                <div class="cinematic-text" id="cinematicText">
+                    The base is built at the strategic location. Juno's pilots run efficient missions. Dr. Thorne's team exploits the resource clusters. Commander Rostova begins drawing up plans for future expansion based on your comprehensive analysis.
+                </div>
+                <div class="commander-final">
+                    <strong style="color: #d4af37;">Commander Rostova:</strong><br>
+                    "You were right, Analyst. The answer wasn't to find one perfect number, but to understand the story each number told. You've saved this mission and secured our future on Averion."
+                </div>
+                <div class="mission-complete">Mission Complete</div>
+                <button class="continue-btn" onclick="restartMission()">New Analysis</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedStrategy = {
+            base: null,
+            missions: null,
+            expansion: null
+        };
+        
+        const perfectStrategy = {
+            base: 'median',
+            missions: 'mode',
+            expansion: 'mean'
+        };
+        
+        // Add click handlers to strategy options
+        document.addEventListener('DOMContentLoaded', function() {
+            const options = document.querySelectorAll('.strategy-option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const section = this.dataset.section;
+                    const value = this.dataset.value;
+                    
+                    // Remove selection from other options in same section
+                    document.querySelectorAll(`[data-section="${section}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Select this option
+                    this.classList.add('selected');
+                    selectedStrategy[section] = value;
+                    
+                    // Check if all sections are complete
+                    updateSubmitButton();
+                });
+            });
+        });
+        
+        function updateSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            const allSelected = Object.values(selectedStrategy).every(val => val !== null);
+            submitBtn.disabled = !allSelected;
+        }
+        
+        function submitStrategy() {
+            let score = 0;
+            let feedback = [];
+            
+            // Evaluate base location
+            if (selectedStrategy.base === perfectStrategy.base) {
+                score++;
+                feedback.push({
+                    title: "Main Base Location: OPTIMAL ✅",
+                    text: "The median provides the most balanced and practical location, protecting strategy from outlier skew while remaining central.",
+                    class: "correct"
+                });
+            } else if (selectedStrategy.base === 'mode') {
+                feedback.push({
+                    title: "Main Base Location: SUBOPTIMAL ⚠️",
+                    text: "The mode location offers quick access to common resources but limits long-term expansion potential.",
+                    class: "suboptimal"
+                });
+            } else {
+                feedback.push({
+                    title: "Main Base Location: POOR CHOICE ❌",
+                    text: "The mean location is impractical due to outlier influence, potentially placing the base in dangerous territory.",
+                    class: "poor"
+                });
+            }
+            
+            // Evaluate first missions
+            if (selectedStrategy.missions === perfectStrategy.missions) {
+                score++;
+                feedback.push({
+                    title: "First Missions: OPTIMAL ✅",
+                    text: "Targeting the mode gives immediate supply and morale boost through easily accessible resources.",
+                    class: "correct"
+                });
+            } else if (selectedStrategy.missions === 'median') {
+                feedback.push({
+                    title: "First Missions: SUBOPTIMAL ⚠️",
+                    text: "Setting up supply caches is useful but doesn't provide the immediate resource influx needed early on.",
+                    class: "suboptimal"
+                });
+            } else {
+                feedback.push({
+                    title: "First Missions: POOR CHOICE ❌",
+                    text: "Exploring the mean center wastes early resources and may encounter the dangerous outlier location.",
+                    class: "poor"
+                });
+            }
+            
+            // Evaluate expansion plan
+            if (selectedStrategy.expansion === perfectStrategy.expansion) {
+                score++;
+                feedback.push({
+                    title: "Long-term Expansion: OPTIMAL ✅",
+                    text: "The mean reveals the true center of gravity for all resources, guiding optimal long-term colony development.",
+                    class: "correct"
+                });
+            } else if (selectedStrategy.expansion === 'median') {
+                feedback.push({
+                    title: "Long-term Expansion: SUBOPTIMAL ⚠️",
+                    text: "Median-based transport roads are efficient but may miss the valuable outlier deposits in expansion planning.",
+                    class: "suboptimal"
+                });
+            } else {
+                feedback.push({
+                    title: "Long-term Expansion: POOR CHOICE ❌",
+                    text: "Mode-based expansion limits growth to only the most common resource areas, ignoring valuable diversity.",
+                    class: "poor"
+                });
+            }
+            
+            showResults(score, feedback);
+        }
+        
+        function showResults(score, feedback) {
+            const overlay = document.getElementById('resultsOverlay');
+            const scoreText = document.getElementById('scoreText');
+            const feedbackContainer = document.getElementById('strategyFeedback');
+            
+            // Determine mission status based on score
+            let missionStatus = '';
+            let statusColor = '';
+            
+            if (score <= 1) {
+                missionStatus = 'MISSION FAILED';
+                statusColor = '#ff4444';
+            } else {
+                missionStatus = 'MISSION SUCCESSFUL';
+                statusColor = '#00ff00';
+            }
+            
+            scoreText.innerHTML = `${missionStatus}<br>Strategy Score: ${score}/3`;
+            scoreText.style.color = statusColor;
+            
+            feedbackContainer.innerHTML = '';
+            feedback.forEach(item => {
+                const section = document.createElement('div');
+                section.className = `feedback-section ${item.class}`;
+                section.innerHTML = `
+                    <div class="feedback-title">${item.title}</div>
+                    <div>${item.text}</div>
+                `;
+                feedbackContainer.appendChild(section);
+            });
+            
+            overlay.style.display = 'flex';
+        }
+        
+        function showCinematic() {
+            document.getElementById('resultsOverlay').style.display = 'none';
+            
+            const cinematicContainer = document.getElementById('cinematicContainer');
+            const cinematicText = document.getElementById('cinematicText');
+            
+            // Calculate total score
+            let totalScore = 0;
+            if (selectedStrategy.base === perfectStrategy.base) totalScore++;
+            if (selectedStrategy.missions === perfectStrategy.missions) totalScore++;
+            if (selectedStrategy.expansion === perfectStrategy.expansion) totalScore++;
+            
+            let outcomeText = '';
+            let commanderMessage = '';
+            let missionStatus = '';
+            
+            if (totalScore <= 1) {
+                // Mission Failed
+                missionStatus = 'Mission Failed';
+                outcomeText = "The colony struggles with your strategic choices. Poor base placement leads to logistical nightmares, inefficient early missions waste precious resources, and flawed expansion planning threatens long-term survival. The colonists face serious challenges on Averion.";
+                commanderMessage = "Analyst, your strategy has put the mission at risk. We'll need to reassess our approach and learn from these costly mistakes. The colonists are counting on better decisions moving forward.";
+            } else if (totalScore === 2) {
+                // Mission Successful but not perfect
+                missionStatus = 'Mission Successful';
+                outcomeText = "Your strategy shows solid understanding with some excellent choices. While not perfect, the colony establishes a functional presence on Averion. The colonists adapt to overcome the weaker elements of the plan, learning valuable lessons in the process.";
+                commanderMessage = "Good work, Analyst. Your strategy has given us a strong foundation on Averion. There's room for improvement, but you've demonstrated the importance of balancing different statistical approaches.";
+            } else {
+                // Perfect Mission
+                missionStatus = 'Mission Successful';
+                outcomeText = "Your perfect strategy unfolds flawlessly. The base thrives at the median location, providing optimal logistics. Quick victories at the mode sites boost morale and supplies. Long-term planning using the mean ensures sustainable expansion toward all resources, including the valuable outlier.";
+                commanderMessage = "You were right, Analyst. The answer wasn't to find one perfect number, but to understand the story each number told. You've saved this mission and secured our future on Averion.";
+            }
+            
+            cinematicText.textContent = outcomeText;
+            
+            // Update cinematic title and commander message
+            document.querySelector('.cinematic-title').textContent = missionStatus;
+            document.querySelector('.cinematic-title').style.color = totalScore <= 1 ? '#ff4444' : '#d4af37';
+            document.querySelector('.commander-final').innerHTML = `
+                <strong style="color: #d4af37;">Commander Rostova:</strong><br>
+                "${commanderMessage}"
+            `;
+            
+            // Update mission complete text
+            const missionCompleteEl = document.querySelector('.mission-complete');
+            if (totalScore <= 1) {
+                missionCompleteEl.textContent = 'Mission Failed - Retry Required';
+                missionCompleteEl.style.color = '#ff4444';
+            } else {
+                missionCompleteEl.textContent = 'Mission Complete';
+                missionCompleteEl.style.color = '#00ff00';
+            }
+            
+            cinematicContainer.style.display = 'flex';
+        }
+        
+        function restartMission() {
+            // Reset all selections
+            selectedStrategy = { base: null, missions: null, expansion: null };
+            document.querySelectorAll('.strategy-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            updateSubmitButton();
+            
+            // Hide cinematic
+            document.getElementById('cinematicContainer').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

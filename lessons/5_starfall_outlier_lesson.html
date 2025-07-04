@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starfall: The Outlier Discovery</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;700&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+            font-family: 'Orbitron', monospace;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .scene-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .alarm-banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, #ff0000, #ff4444, #ff0000);
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            z-index: 1000;
+            animation: alarm-flash 1s ease-in-out infinite;
+            display: none;
+        }
+        
+        .interactive-map {
+            position: relative;
+            width: 90%;
+            height: 60%;
+            margin: 60px auto 10px;
+            background: radial-gradient(circle at center, rgba(255, 0, 100, 0.1), rgba(100, 0, 50, 0.05));
+            border: 2px solid rgba(255, 100, 150, 0.6);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 0 50px rgba(255, 100, 150, 0.3),
+                inset 0 0 50px rgba(255, 100, 150, 0.1);
+            overflow: hidden;
+        }
+        
+        .map-title {
+            text-align: center;
+            color: #ff6b9d;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+        
+        .coordinate-system {
+            position: relative;
+            width: 85%;
+            height: 70%;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        
+        .main-deposits {
+            position: absolute;
+            bottom: 25%;
+            left: 20%;
+            right: 20%;
+            height: 15%;
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+        
+        .deposit {
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #ffd700, #d4af37);
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .outlier-deposit {
+            position: absolute;
+            top: 5%;
+            right: 10%;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #ff0080, #cc0066);
+            border: 3px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: grab;
+            box-shadow: 0 0 30px rgba(255, 0, 128, 0.8);
+            animation: outlier-glow 2s ease-in-out infinite;
+            z-index: 100;
+        }
+        
+        .outlier-deposit:active {
+            cursor: grabbing;
+        }
+        
+        .mean-indicator {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #d4af37, #d4af37, transparent);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+            transition: left 0.3s ease;
+        }
+        
+        .median-indicator {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #4169e1, #4169e1, transparent);
+            box-shadow: 0 0 15px rgba(65, 105, 225, 0.8);
+            left: 30%;
+        }
+        
+        .mode-indicator {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #22c55e, #22c55e, transparent);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.8);
+            left: 35%;
+        }
+        
+        .statistics-panel {
+            position: absolute;
+            bottom: 5%;
+            left: 5%;
+            right: 5%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid;
+        }
+        
+        .mean-box {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .median-box {
+            border-color: #4169e1;
+            background: rgba(65, 105, 225, 0.1);
+        }
+        
+        .mode-box {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+        
+        .stat-label {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        .stat-change {
+            font-size: 0.9rem;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .dialogue-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 2px solid rgba(255, 100, 150, 0.6);
+            backdrop-filter: blur(15px);
+            padding: 20px;
+            max-height: 40vh;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .character-dialogue {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(20, 30, 50, 0.6);
+            border-radius: 10px;
+            border-left: 4px solid;
+        }
+        
+        .commander { border-left-color: #d4af37; }
+        .juno { border-left-color: #4169e1; }
+        .data-officer { border-left-color: #ff6b9d; }
+        
+        .character-name {
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .commander .character-name { color: #d4af37; }
+        .juno .character-name { color: #4169e1; }
+        .data-officer .character-name { color: #ff6b9d; }
+        
+        .dialogue-text {
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .quiz-container {
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid rgba(255, 165, 0, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px;
+            backdrop-filter: blur(20px);
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .quiz-header h3 {
+            color: #ff8c00;
+            margin: 0 0 15px 0;
+            font-size: 1.4rem;
+        }
+        
+        .quiz-question {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .quiz-option {
+            background: rgba(20, 30, 50, 0.8);
+            border: 2px solid rgba(135, 206, 235, 0.6);
+            border-radius: 8px;
+            padding: 15px 20px;
+            color: #e0e0e0;
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .quiz-option:hover {
+            background: rgba(135, 206, 235, 0.2);
+            border-color: #d4af37;
+            transform: translateY(-2px);
+        }
+        
+        .quiz-option.correct {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00ff00;
+        }
+        
+        .quiz-option.incorrect {
+            background: rgba(255, 0, 0, 0.2);
+            border-color: #ff4444;
+        }
+        
+        .option-letter {
+            font-weight: 700;
+            color: #d4af37;
+            margin-right: 10px;
+        }
+        
+        .instructions {
+            background: rgba(255, 165, 0, 0.1);
+            border: 2px solid rgba(255, 165, 0, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #ff6b9d, #ff8fab);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        }
+        
+        .continue-btn {
+            display: block;
+            margin: 30px auto 0;
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            color: #000;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 8px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 15px rgba(212, 175, 55, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            min-width: 200px;
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 25px rgba(212, 175, 55, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+        }
+        
+        .continue-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 
+                0 4px 15px rgba(212, 175, 55, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Lesson Completion Modal */
+        #lessonComplete {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3000;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid rgba(135, 206, 235, 0.6);
+            color: #e0e0e0;
+            font-family: 'Orbitron', monospace;
+            max-width: 750px;
+            text-align: center;
+            opacity: 0;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .completion-header {
+            color: #d4af37;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+        }
+        
+        .completion-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        .completion-highlight {
+            color: #87ceeb;
+            font-weight: 500;
+        }
+        
+        /* Mission Failed Modal */
+        #missionFailed {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3000;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 100, 100, 0.8);
+            color: #e0e0e0;
+            font-family: 'Orbitron', monospace;
+            max-width: 600px;
+            text-align: center;
+            opacity: 0;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .failed-header {
+            color: #ff4444;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
+        }
+        
+        .failed-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        .retry-btn {
+            background: linear-gradient(45deg, #ff4444, #ff6b6b);
+            color: #fff;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 8px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 15px rgba(255, 68, 68, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            min-width: 200px;
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 25px rgba(255, 68, 68, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        }
+        
+        /* Enhanced completion modal button */
+        #lessonComplete .continue-btn {
+            background: linear-gradient(45deg, #d4af37, #ffd700, #d4af37);
+            background-size: 200% 200%;
+            animation: goldShimmer 3s ease-in-out infinite;
+            font-size: 1.2rem;
+            padding: 18px 40px;
+            margin-top: 35px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        #lessonComplete .continue-btn:hover {
+            animation-duration: 1.5s;
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 
+                0 10px 30px rgba(212, 175, 55, 0.7),
+                inset 0 2px 0 rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes goldShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+        }
+        
+        .feedback.incorrect {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff4444;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        @keyframes outlier-glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 0, 128, 0.8); }
+            50% { box-shadow: 0 0 50px rgba(255, 0, 128, 1), 0 0 70px rgba(255, 0, 128, 0.6); }
+        }
+        
+        @keyframes alarm-flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scene-container">
+        <!-- Alarm Banner -->
+        <div id="alarmBanner" class="alarm-banner">
+            🚨 ANOMALOUS READING DETECTED - NEW DEPOSIT DISCOVERED 🚨
+        </div>
+        
+        <!-- Interactive Map -->
+        <div class="interactive-map">
+            <div class="map-title">Averion Valley - Crystal Deposit Locations</div>
+            
+            <div class="coordinate-system" id="coordinateSystem">
+                <!-- Main valley deposits -->
+                <div class="main-deposits">
+                    <div class="deposit">💎</div>
+                    <div class="deposit">💎</div>
+                    <div class="deposit">💎</div>
+                    <div class="deposit">💎</div>
+                    <div class="deposit">💎</div>
+                    <div class="deposit">💎</div>
+                    <div class="deposit">💎</div>
+                    <div class="deposit">💎</div>
+                    <div class="deposit">💎</div>
+                </div>
+                
+                <!-- Outlier deposit (draggable) -->
+                <div class="outlier-deposit" id="outlierDeposit">⭐</div>
+                
+                <!-- Statistical indicators -->
+                <div class="mean-indicator" id="meanIndicator"></div>
+                <div class="median-indicator" id="medianIndicator"></div>
+                <div class="mode-indicator" id="modeIndicator"></div>
+            </div>
+            
+            <!-- Statistics Panel -->
+            <div class="statistics-panel">
+                <div class="stat-box mean-box">
+                    <div class="stat-label" style="color: #d4af37;">MEAN</div>
+                    <div class="stat-value" id="meanValue">15.2km</div>
+                    <div class="stat-change" id="meanChange">Baseline</div>
+                </div>
+                <div class="stat-box median-box">
+                    <div class="stat-label" style="color: #4169e1;">MEDIAN</div>
+                    <div class="stat-value" id="medianValue">7km</div>
+                    <div class="stat-change" id="medianChange">Stable</div>
+                </div>
+                <div class="stat-box mode-box">
+                    <div class="stat-label" style="color: #22c55e;">MODE</div>
+                    <div class="stat-value" id="modeValue">Sector 4</div>
+                    <div class="stat-change" id="modeChange">Unchanged</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dialogue Container -->
+        <div class="dialogue-container" id="dialogueContainer">
+            <div id="dialogue1" class="character-dialogue commander">
+                <div>
+                    <div class="character-name">Commander Rostova</div>
+                    <div class="dialogue-text">
+                        Report! What is that?
+                    </div>
+                </div>
+            </div>
+            
+            <div id="dialogue2" class="character-dialogue data-officer hidden">
+                <div>
+                    <div class="character-name">Data Officer</div>
+                    <div class="dialogue-text">
+                        Commander... we've just found a new deposit. The readings are off the charts. It's a single, massive motherlode of Helios Crystals. But... it's way out in the northern Tundra, far from the main valley.
+                    </div>
+                </div>
+            </div>
+            
+            <div id="dialogue3" class="character-dialogue commander hidden">
+                <div>
+                    <div class="character-name">Commander Rostova</div>
+                    <div class="dialogue-text">
+                        Recalculate the mean! That has to be our new target.
+                    </div>
+                </div>
+            </div>
+            
+            <div id="dialogue4" class="character-dialogue juno hidden">
+                <div>
+                    <div class="character-name">Juno</div>
+                    <div class="dialogue-text">
+                        Wait! Commander, think about what that <strong style="color: #ff6b9d;">outlier</strong> will do to your math!
+                    </div>
+                </div>
+            </div>
+            
+            <button id="continueBtn" class="btn continue-btn" onclick="nextDialogue()">Continue</button>
+        </div>
+        
+        <!-- Quiz Container -->
+        <div id="quizContainer" class="quiz-container">
+            <div class="quiz-header">
+                <h3>THE OUTLIER</h3>
+                <div class="quiz-question">
+                    This new, distant 'outlier' deposit has been added to the dataset. Which of our three 'averages' will be affected the MOST by this single new data point?
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <strong>Interactive Tool:</strong> Drag the red outlier deposit around the map and watch how each statistical measure responds in real-time!
+            </div>
+            
+            <div class="quiz-options">
+                <button class="quiz-option" onclick="selectAnswer('A')">
+                    <span class="option-letter">A)</span>
+                    The Mean will change dramatically.
+                </button>
+                <button class="quiz-option" onclick="selectAnswer('B')">
+                    <span class="option-letter">B)</span>
+                    The Median will change dramatically.
+                </button>
+                <button class="quiz-option" onclick="selectAnswer('C')">
+                    <span class="option-letter">C)</span>
+                    The Mode will change dramatically.
+                </button>
+            </div>
+            
+            <div id="feedback" class="feedback">
+                <div id="feedbackText"></div>
+                <button class="btn continue-btn" onclick="completeLesson()">Continue Mission</button>
+            </div>
+        </div>
+        
+        <!-- Lesson Completion Modal -->
+        <div id="lessonComplete">
+            <div class="completion-header">Lesson Complete!</div>
+            <div class="completion-text">
+                You've discovered the critical weakness of the <span class="completion-highlight">MEAN</span>:
+            </div>
+            <div class="completion-text">
+                📊 <strong>MEAN:</strong> Sensitive to outliers - can be dragged to impractical locations<br>
+                📍 <strong>MEDIAN:</strong> Resistant to outliers - stays stable<br>
+                🌿 <strong>MODE:</strong> Unaffected by outliers - focuses on frequency
+            </div>
+            <div class="completion-text">
+                <strong>Key Insight:</strong> Outliers can make the "mathematically perfect" mean completely impractical! This is why understanding your data's <span class="completion-highlight">context and distribution</span> is crucial.
+            </div>
+            <div class="completion-text">
+                Next: We'll learn how to choose the right measure for the right situation...
+            </div>
+            <button class="continue-btn" onclick="proceedToNextLesson(); return false;">Continue Mission</button>
+        </div>
+        
+        <!-- Mission Failed Modal -->
+        <div id="missionFailed">
+            <div class="failed-header">MISSION FAILED</div>
+            <div class="failed-text">
+                The colony has been compromised! Your analysis led to a critical error that endangered the lives of 50,000 colonists.
+            </div>
+            <div class="failed-text">
+                A good data analyst must think carefully about the consequences of their recommendations.
+            </div>
+            <button class="retry-btn" onclick="retryLesson(); return false;">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        let dialogueStep = 0;
+        let isDragging = false;
+        let originalMeanPosition = 25; // Starting mean position as percentage
+        let baselineData = [1, 2, 4, 5, 7, 12, 14, 15, 30]; // Original coordinates
+        
+        function nextDialogue() {
+            dialogueStep++;
+            
+            const continueBtn = document.getElementById('continueBtn');
+            const alarmBanner = document.getElementById('alarmBanner');
+            
+            switch(dialogueStep) {
+                case 1:
+                    // Show alarm and new deposit
+                    alarmBanner.style.display = 'block';
+                    showElement('dialogue2');
+                    break;
+                case 2:
+                    showElement('dialogue3');
+                    break;
+                case 3:
+                    showElement('dialogue4');
+                    break;
+                case 4:
+                    continueBtn.style.display = 'none';
+                    document.getElementById('dialogueContainer').style.display = 'none';
+                    showQuiz();
+                    break;
+            }
+        }
+        
+        function showElement(id) {
+            const element = document.getElementById(id);
+            element.classList.remove('hidden');
+            element.classList.add('fade-in');
+        }
+        
+        function showQuiz() {
+            document.getElementById('quizContainer').style.display = 'block';
+            initializeDragAndDrop();
+        }
+        
+        function initializeDragAndDrop() {
+            const outlier = document.getElementById('outlierDeposit');
+            const coordinateSystem = document.getElementById('coordinateSystem');
+            
+            let startX, startY, initialLeft, initialTop;
+            
+            outlier.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', endDrag);
+            
+            function startDrag(e) {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                
+                const rect = coordinateSystem.getBoundingClientRect();
+                const outlierRect = outlier.getBoundingClientRect();
+                
+                initialLeft = ((outlierRect.left - rect.left) / rect.width) * 100;
+                initialTop = ((outlierRect.top - rect.top) / rect.height) * 100;
+                
+                outlier.style.cursor = 'grabbing';
+                e.preventDefault();
+            }
+            
+            function drag(e) {
+                if (!isDragging) return;
+                
+                const rect = coordinateSystem.getBoundingClientRect();
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                const deltaXPercent = (deltaX / rect.width) * 100;
+                const deltaYPercent = (deltaY / rect.height) * 100;
+                
+                let newLeft = initialLeft + deltaXPercent;
+                let newTop = initialTop + deltaYPercent;
+                
+                // Constrain to bounds
+                newLeft = Math.max(2, Math.min(95, newLeft));
+                newTop = Math.max(2, Math.min(95, newTop));
+                
+                outlier.style.left = newLeft + '%';
+                outlier.style.top = newTop + '%';
+                
+                updateStatistics(newLeft);
+            }
+            
+            function endDrag() {
+                isDragging = false;
+                outlier.style.cursor = 'grab';
+            }
+        }
+        
+        function updateStatistics(outlierPosition) {
+            // Convert outlier position to coordinate (0-100km range)
+            const outlierCoord = (outlierPosition / 100) * 100;
+            
+            // Update data with outlier
+            const newData = [...baselineData, outlierCoord];
+            
+            // Calculate new mean
+            const newMean = newData.reduce((a, b) => a + b, 0) / newData.length;
+            const meanChange = newMean - (baselineData.reduce((a, b) => a + b, 0) / baselineData.length);
+            
+            // Calculate new median
+            const sortedData = [...newData].sort((a, b) => a - b);
+            const newMedian = sortedData[Math.floor(sortedData.length / 2)];
+            
+            // Mode stays the same (still Sector 4 from original data)
+            
+            // Update display
+            document.getElementById('meanValue').textContent = newMean.toFixed(1) + 'km';
+            document.getElementById('meanChange').textContent = 
+                meanChange > 0 ? `+${meanChange.toFixed(1)}km shift` : `${meanChange.toFixed(1)}km shift`;
+            document.getElementById('meanChange').style.color = Math.abs(meanChange) > 5 ? '#ff4444' : '#00ff00';
+            
+            document.getElementById('medianValue').textContent = newMedian.toFixed(1) + 'km';
+            document.getElementById('medianChange').textContent = 'Minimal change';
+            
+            document.getElementById('modeValue').textContent = 'Sector 4';
+            document.getElementById('modeChange').textContent = 'No change';
+            
+            // Update mean indicator position
+            const meanIndicator = document.getElementById('meanIndicator');
+            const meanPercent = (newMean / 100) * 100; // Convert back to percentage
+            meanIndicator.style.left = Math.min(95, Math.max(5, meanPercent)) + '%';
+        }
+        
+        function selectAnswer(answer) {
+            const options = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback');
+            const feedbackText = document.getElementById('feedbackText');
+            
+            // Disable all options
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (answer === 'A') {
+                // Correct answer
+                options[0].classList.add('correct');
+                feedbackText.innerHTML = `
+                    <h4 style="color: #00ff00; margin-top: 0;">✅ Correct!</h4>
+                    <p><strong>A.</strong> This is the key lesson about outliers. The mean is extremely sensitive to them, while the median and mode are resistant.</p>
+                    <p>As you discovered by dragging the outlier, the <strong>mean</strong> gets pulled dramatically toward extreme values, while the <strong>median</strong> and <strong>mode</strong> barely budge.</p>
+                    <p>This proves Juno's earlier point and deepens the dilemma. The "perfect" mathematical answer (mean) is now the most impractical one!</p>
+                `;
+                feedback.classList.add('correct');
+            } else {
+                // Show mission failed modal for wrong answers
+                showMissionFailed();
+                return;
+            }
+            
+            feedback.style.display = 'block';
+        }
+        
+        function completeLesson() {
+            // Show the custom completion modal
+            const completionModal = document.getElementById('lessonComplete');
+            completionModal.style.display = 'block';
+            
+            // Fade in the modal
+            setTimeout(() => {
+                completionModal.style.opacity = '1';
+            }, 50);
+        }
+        
+        function proceedToNextLesson() {
+            // Hide the completion modal
+            document.getElementById('lessonComplete').style.opacity = '0';
+            
+            setTimeout(() => {
+                document.getElementById('lessonComplete').style.display = 'none';
+                // Navigate to the next lesson
+                window.location.href = '6_starfall_resolution.html';
+            }, 1000);
+            
+            return false;
+        }
+        
+        function showMissionFailed() {
+            const failedModal = document.getElementById('missionFailed');
+            failedModal.style.display = 'block';
+            
+            // Fade in the modal
+            setTimeout(() => {
+                failedModal.style.opacity = '1';
+            }, 50);
+        }
+        
+        function retryLesson() {
+            // Hide the failed modal
+            document.getElementById('missionFailed').style.opacity = '0';
+            
+            setTimeout(() => {
+                document.getElementById('missionFailed').style.display = 'none';
+                // Reset the lesson
+                location.reload();
+            }, 1000);
+            
+            return false;
+        }
+        
+        // Initialize the scene
+        window.addEventListener('load', () => {
+            // Show initial dialogue after brief delay
+            setTimeout(() => {
+                document.getElementById('dialogueContainer').style.display = 'block';
+            }, 1000);
+            
+            // Set initial statistics
+            const baselineMean = baselineData.reduce((a, b) => a + b, 0) / baselineData.length;
+            document.getElementById('meanValue').textContent = baselineMean.toFixed(1) + 'km';
+            
+            // Position mean indicator
+            const meanIndicator = document.getElementById('meanIndicator');
+            meanIndicator.style.left = (baselineMean / 100) * 100 + '%';
+        });
+    </script>
+</body>
+</html>

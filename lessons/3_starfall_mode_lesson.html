@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starfall: The Mode Location Challenge</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;700&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+            font-family: 'Orbitron', monospace;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .scene-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .survey-display {
+            position: relative;
+            width: 85%;
+            height: 50%;
+            margin: 15px auto;
+            background: radial-gradient(circle at center, rgba(34, 139, 34, 0.1), rgba(0, 100, 0, 0.05));
+            border: 2px solid rgba(34, 139, 34, 0.6);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 0 50px rgba(34, 139, 34, 0.3),
+                inset 0 0 50px rgba(34, 139, 34, 0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .valley-map {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 20px;
+            width: 80%;
+            height: 70%;
+        }
+        
+        .sector {
+            background: rgba(20, 30, 50, 0.6);
+            border: 2px solid rgba(135, 206, 235, 0.4);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .sector-4 {
+            background: rgba(34, 139, 34, 0.3);
+            border-color: #22c55e;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+        }
+        
+        .sector-7 {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .sector-name {
+            font-weight: 700;
+            color: #d4af37;
+            margin-bottom: 5px;
+        }
+        
+        .crystal-count {
+            color: #22c55e;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+        
+        .crystal-icons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 5px;
+        }
+        
+        .crystal {
+            font-size: 1.2rem;
+            margin: 1px;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        
+        .dialogue-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 2px solid rgba(34, 139, 34, 0.6);
+            backdrop-filter: blur(15px);
+            padding: 20px;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+        
+        .character-dialogue {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(20, 30, 50, 0.6);
+            border-radius: 10px;
+            border-left: 4px solid;
+        }
+        
+        .botanist { border-left-color: #22c55e; }
+        .commander { border-left-color: #d4af37; }
+        
+        .character-name {
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .botanist .character-name {
+            color: #22c55e;
+        }
+        
+        .commander .character-name {
+            color: #d4af37;
+        }
+        
+        .dialogue-text {
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .tutorial-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid rgba(34, 139, 34, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            display: none;
+        }
+        
+        .tutorial-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .tutorial-header h3 {
+            color: #22c55e;
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+        }
+        
+        .data-analysis {
+            background: rgba(34, 139, 34, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid rgba(34, 139, 34, 0.3);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .quiz-container {
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid rgba(255, 165, 0, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px;
+            backdrop-filter: blur(20px);
+            display: none;
+        }
+        
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .quiz-header h3 {
+            color: #ff8c00;
+            margin: 0 0 15px 0;
+            font-size: 1.4rem;
+        }
+        
+        .quiz-question {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .data-display {
+            background: rgba(34, 139, 34, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid rgba(34, 139, 34, 0.5);
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .quiz-option {
+            background: rgba(20, 30, 50, 0.8);
+            border: 2px solid rgba(135, 206, 235, 0.6);
+            border-radius: 8px;
+            padding: 15px 20px;
+            color: #e0e0e0;
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .quiz-option:hover {
+            background: rgba(135, 206, 235, 0.2);
+            border-color: #d4af37;
+            transform: translateY(-2px);
+        }
+        
+        .quiz-option.correct {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00ff00;
+        }
+        
+        .quiz-option.incorrect {
+            background: rgba(255, 0, 0, 0.2);
+            border-color: #ff4444;
+        }
+        
+        .option-letter {
+            font-weight: 700;
+            color: #d4af37;
+            margin-right: 10px;
+        }
+        
+        .simulation-result {
+            background: rgba(255, 165, 0, 0.1);
+            border: 2px solid rgba(255, 165, 0, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .power-meter {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 0, 0, 0.6);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .power-bar {
+            background: linear-gradient(90deg, #ff0000, #ff4444);
+            height: 20px;
+            width: 15%;
+            border-radius: 10px;
+            margin: 10px auto;
+            position: relative;
+        }
+        
+        .rare-deposits {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #ffd700;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #22c55e, #34d399);
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+        }
+        
+        .continue-btn {
+            display: block;
+            margin: 30px auto 0;
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            color: #000;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 8px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 15px rgba(212, 175, 55, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            min-width: 200px;
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 25px rgba(212, 175, 55, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+        }
+        
+        .continue-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 
+                0 4px 15px rgba(212, 175, 55, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Lesson Completion Modal */
+        #lessonComplete {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3000;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid rgba(135, 206, 235, 0.6);
+            color: #e0e0e0;
+            font-family: 'Orbitron', monospace;
+            max-width: 700px;
+            text-align: center;
+            opacity: 0;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .completion-header {
+            color: #d4af37;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+        }
+        
+        .completion-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        .completion-highlight {
+            color: #87ceeb;
+            font-weight: 500;
+        }
+        
+        /* Enhanced completion modal button */
+        #lessonComplete .continue-btn {
+            background: linear-gradient(45deg, #d4af37, #ffd700, #d4af37);
+            background-size: 200% 200%;
+            animation: goldShimmer 3s ease-in-out infinite;
+            font-size: 1.2rem;
+            padding: 18px 40px;
+            margin-top: 35px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        #lessonComplete .continue-btn:hover {
+            animation-duration: 1.5s;
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 
+                0 10px 30px rgba(212, 175, 55, 0.7),
+                inset 0 2px 0 rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes goldShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Mission Failed Modal */
+        #missionFailed {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3000;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 100, 100, 0.8);
+            color: #e0e0e0;
+            font-family: 'Orbitron', monospace;
+            max-width: 600px;
+            text-align: center;
+            opacity: 0;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .failed-header {
+            color: #ff4444;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
+        }
+        
+        .failed-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        .retry-btn {
+            background: linear-gradient(45deg, #ff4444, #ff6b6b);
+            color: #fff;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 8px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 15px rgba(255, 68, 68, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            min-width: 200px;
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 25px rgba(255, 68, 68, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+        }
+        
+        .feedback.incorrect {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff4444;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="scene-container">
+        <!-- Survey Data Display -->
+        <div class="survey-display">
+            <div class="valley-map">
+                <div class="sector">
+                    <div class="sector-name">Sector 4</div>
+                    <div class="crystal-count">4 Sightings</div>
+                    <div class="crystal-icons">
+                        <span class="crystal">💎</span>
+                        <span class="crystal">💎</span>
+                        <span class="crystal">💎</span>
+                        <span class="crystal">💎</span>
+                    </div>
+                </div>
+                <div class="sector">
+                    <div class="sector-name">Sector 5</div>
+                    <div class="crystal-count">1 Sighting</div>
+                    <div class="crystal-icons">
+                        <span class="crystal">💎</span>
+                    </div>
+                </div>
+                <div class="sector sector-7">
+                    <div class="sector-name">Sector 7</div>
+                    <div class="crystal-count">2 Sightings</div>
+                    <div class="crystal-icons">
+                        <span class="crystal">💎</span>
+                        <span class="crystal">💎</span>
+                    </div>
+                </div>
+                <div class="sector">
+                    <div class="sector-name">Sector 8</div>
+                    <div class="crystal-count">1 Sighting</div>
+                    <div class="crystal-icons">
+                        <span class="crystal">💎</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dialogue Container -->
+        <div class="dialogue-container">
+            <div id="dialogue1" class="character-dialogue botanist">
+                <div>
+                    <div class="character-name">Dr. Aris Thorne (Botanist)</div>
+                    <div class="dialogue-text">
+                        Commander, precision is one thing, but boots on the ground tell a different story. For weeks, I've been surveying the valley. The scans show deposits, but my team has found that the crystals in the northeast quadrant are not only plentiful, but they are also the easiest to extract. We should build our base where the resources are most <strong style="color: #22c55e;">frequently</strong> found.
+                    </div>
+                </div>
+            </div>
+            
+            <div id="dialogue2" class="character-dialogue commander hidden">
+                <div>
+                    <div class="character-name">Commander Rostova</div>
+                    <div class="dialogue-text">
+                        You want to ignore the data from the entire rest of the valley based on your localized survey?
+                    </div>
+                </div>
+            </div>
+            
+            <div id="dialogue3" class="character-dialogue botanist hidden">
+                <div>
+                    <div class="character-name">Dr. Aris Thorne</div>
+                    <div class="dialogue-text">
+                        I want to go where the crystals actually <strong>are</strong>. I'm talking about the <strong style="color: #22c55e;">mode</strong>—the most common location in the dataset.
+                    </div>
+                </div>
+            </div>
+            
+            <button id="continueBtn" class="btn continue-btn" onclick="nextDialogue()">Continue</button>
+        </div>
+        
+        <!-- Tutorial Popup -->
+        <div id="tutorialPopup" class="tutorial-popup">
+            <div class="tutorial-header">
+                <h3>🌿 TUTORIAL: THE MODE</h3>
+                <p>Understanding Frequency in Data</p>
+            </div>
+            <div class="tutorial-content">
+                <p>The <strong>MODE</strong> is the value that appears most frequently in a dataset. A dataset can have one mode, more than one mode, or no mode at all.</p>
+                <div class="data-analysis">
+                    <p><strong>Dr. Thorne's Survey Data:</strong></p>
+                    <p>[Sector 4, Sector 7, Sector 4, Sector 8, Sector 4, Sector 5, Sector 7, Sector 4]</p>
+                    <br>
+                    <p><strong>Frequency Count:</strong></p>
+                    <p>Sector 4: 4 times ← MODE (most frequent)</p>
+                    <p>Sector 7: 2 times</p>
+                    <p>Sector 5: 1 time</p>
+                    <p>Sector 8: 1 time</p>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <button class="btn" onclick="closeTutorial()">Understood</button>
+            </div>
+        </div>
+        
+        <!-- Quiz Container -->
+        <div id="quizContainer" class="quiz-container">
+            <div class="quiz-header">
+                <h3>PROBLEM-SOLVING CHALLENGE</h3>
+                <div class="quiz-question">
+                    Dr. Thorne argues we should build where the crystals are most common. What is the potential danger of listening only to him?
+                </div>
+            </div>
+            
+            <div class="data-display">
+                <strong>Survey Data:</strong> [Sector 4, Sector 7, Sector 4, Sector 8, Sector 4, Sector 5, Sector 7, Sector 4]<br>
+                <strong>Mode:</strong> Sector 4 (appears 4 times)
+            </div>
+            
+            <div class="quiz-options">
+                <button class="quiz-option" onclick="selectAnswer('A')">
+                    <span class="option-letter">A)</span>
+                    The most frequent location might have low-quality crystals.
+                </button>
+                <button class="quiz-option" onclick="selectAnswer('B')">
+                    <span class="option-letter">B)</span>
+                    Ignoring other locations means we could miss the richest, most valuable deposits.
+                </button>
+                <button class="quiz-option" onclick="selectAnswer('C')">
+                    <span class="option-letter">C)</span>
+                    Dr. Thorne might be trying to mislead the crew.
+                </button>
+            </div>
+            
+            <div id="feedback" class="feedback">
+                <div id="feedbackText"></div>
+                <div id="simulationResult" class="simulation-result">
+                    <h4 style="color: #ff8c00;">SIMULATION RESULTS</h4>
+                    <p>Base built at Sector 4 (mode location). The crew easily gathers many crystals...</p>
+                    <div class="power-meter">
+                        <div>Colony Power Level</div>
+                        <div class="power-bar"></div>
+                        <div style="color: #ff4444;">Only 15% - Critically Low!</div>
+                    </div>
+                    <div class="rare-deposits">
+                        <strong>⚠️ NEW REPORT DISCOVERED ⚠️</strong><br>
+                        Rare deposits in the south are 100x more powerful!<br>
+                        <em>Mode showed frequency, not value.</em>
+                    </div>
+                </div>
+                <button class="btn continue-btn" onclick="completeLesson()">Continue Mission</button>
+            </div>
+        </div>
+        
+        <!-- Lesson Completion Modal -->
+        <div id="lessonComplete">
+            <div class="completion-header">Lesson Complete!</div>
+            <div class="completion-text">
+                You've learned that the <span class="completion-highlight">MODE</span> shows what's most frequent, but frequency doesn't equal value. In data science, we must consider both the <span class="completion-highlight">quantity AND quality</span> of our data points.
+            </div>
+            <div class="completion-text">
+                <strong>Key Insight:</strong> Sometimes the rare outliers are more important than the common occurrences!
+            </div>
+            <div class="completion-text">
+                Next: We'll explore the median and how it handles extreme values...
+            </div>
+            <button class="continue-btn" onclick="proceedToNextLesson(); return false;">Continue Mission</button>
+        </div>
+        
+        <!-- Mission Failed Modal -->
+        <div id="missionFailed">
+            <div class="failed-header">MISSION FAILED</div>
+            <div class="failed-text">
+                The colony has been compromised! Your analysis led to a critical error that endangered the lives of 50,000 colonists.
+            </div>
+            <div class="failed-text">
+                A good data analyst must think carefully about the consequences of their recommendations.
+            </div>
+            <button class="retry-btn" onclick="retryLesson(); return false;">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        let dialogueStep = 0;
+        let quizCompleted = false;
+        
+        function nextDialogue() {
+            dialogueStep++;
+            
+            const continueBtn = document.getElementById('continueBtn');
+            
+            switch(dialogueStep) {
+                case 1:
+                    showElement('dialogue2');
+                    break;
+                case 2:
+                    showElement('dialogue3');
+                    break;
+                case 3:
+                    continueBtn.style.display = 'none';
+                    showTutorial();
+                    break;
+            }
+        }
+        
+        function showElement(id) {
+            const element = document.getElementById(id);
+            element.classList.remove('hidden');
+            element.classList.add('fade-in');
+        }
+        
+        function showTutorial() {
+            document.getElementById('tutorialPopup').style.display = 'block';
+        }
+        
+        function closeTutorial() {
+            document.getElementById('tutorialPopup').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+        }
+        
+        function selectAnswer(answer) {
+            const options = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback');
+            const feedbackText = document.getElementById('feedbackText');
+            const simulationResult = document.getElementById('simulationResult');
+            
+            // Disable all options
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (answer === 'B') {
+                // Correct answer
+                options[1].classList.add('correct');
+                feedbackText.innerHTML = `
+                    <h4 style="color: #00ff00; margin-top: 0;">✅ Correct!</h4>
+                    <p><strong>B.</strong> The mode tells you what's most frequent, but it doesn't account for the value or importance of other data points. This creates a conflict: abundance vs. value.</p>
+                    <p>Dr. Thorne's approach would lead to gathering many low-value crystals while missing the rare, powerful ones that could save the colony.</p>
+                `;
+                feedback.classList.add('correct');
+            } else {
+                // Show mission failed modal for wrong answers
+                showMissionFailed();
+                return;
+            }
+            
+            // Show simulation results
+            simulationResult.style.display = 'block';
+            feedback.style.display = 'block';
+            quizCompleted = true;
+        }
+        
+        function completeLesson() {
+            // Show the custom completion modal
+            const completionModal = document.getElementById('lessonComplete');
+            completionModal.style.display = 'block';
+            
+            // Fade in the modal
+            setTimeout(() => {
+                completionModal.style.opacity = '1';
+            }, 50);
+        }
+        
+        function proceedToNextLesson() {
+            // Hide the completion modal
+            document.getElementById('lessonComplete').style.opacity = '0';
+            
+            setTimeout(() => {
+                document.getElementById('lessonComplete').style.display = 'none';
+                // Navigate to the next lesson
+                window.location.href = '4_starfall_median_lesson.html';
+            }, 1000);
+            
+            return false;
+        }
+        
+        function showMissionFailed() {
+            const failedModal = document.getElementById('missionFailed');
+            failedModal.style.display = 'block';
+            
+            // Fade in the modal
+            setTimeout(() => {
+                failedModal.style.opacity = '1';
+            }, 50);
+        }
+        
+        function retryLesson() {
+            // Hide the failed modal
+            document.getElementById('missionFailed').style.opacity = '0';
+            
+            setTimeout(() => {
+                document.getElementById('missionFailed').style.display = 'none';
+                // Reset the lesson
+                location.reload();
+            }, 1000);
+            
+            return false;
+        }
+        
+        // Initialize the scene
+        window.addEventListener('load', () => {
+            // Highlight Sector 4 as the mode
+            const sector4 = document.querySelector('.valley-map .sector');
+            sector4.classList.add('sector-4');
+            
+            // Add animation delays to crystals
+            const crystals = document.querySelectorAll('.crystal');
+            crystals.forEach((crystal, index) => {
+                crystal.style.animationDelay = `${index * 0.2}s`;
+            });
+        });
+    </script>
+</body>
+</html>
