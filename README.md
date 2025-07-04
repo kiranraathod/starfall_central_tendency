@@ -6,7 +6,7 @@
 
 ## 🌟 Demo
 
-[🎮 Play Starfall: The Averion Dilemma]
+[🎮 Play Starfall: The Averion Dilemma](https://kiranraathod.github.io/starfall_central_tendency/)
 
 Jump into the full experience and help 50,000 colonists settle a new world using the power of statistical reasoning.
 
