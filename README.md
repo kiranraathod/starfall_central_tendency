@@ -92,14 +92,8 @@ starfall-central-tendency/
 │   ├── 5_starfall_outlier_lesson.html # Outlier analysis
 │   └── 6_starfall_resolution.html  # Final synthesis & conclusion
 ├── assets/
-│   ├── css/
-│   │   └── styles.css          # Shared styling (if extracted)
-│   ├── js/
-│   │   └── game-logic.js       # Shared JavaScript (if extracted)
-│   └── images/                 # Game assets (if any)
-├── docs/
-│   ├── EDUCATIONAL_GUIDE.md    # Teacher/educator resources
-│   └── TECHNICAL_DOCS.md       # Development documentation
+|  └── .gif
+|
 └── README.md                   # This file
 ```
 
