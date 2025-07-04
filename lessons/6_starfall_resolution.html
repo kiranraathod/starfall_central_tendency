@@ -307,18 +307,186 @@
             background: linear-gradient(45deg, #4169e1, #6495ed);
             color: #fff;
             border: none;
-            padding: 12px 25px;
+            padding: 14px 30px;
+            border-radius: 6px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 15px 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            min-width: 180px;
+            box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(65, 105, 225, 0.5);
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .mission2-btn {
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            color: #000;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 6px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 15px 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            min-width: 180px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .mission2-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+        }
+        
+        /* Mission 2 Signup Modal */
+        .mission2-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .mission2-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                0 0 50px rgba(212, 175, 55, 0.3);
+            color: #e0e0e0;
+            animation: modalSlideIn 0.5s ease-out;
+        }
+        
+        .mission2-title {
+            color: #d4af37;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+        }
+        
+        .mission2-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .email-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .email-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            color: #e0e0e0;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .email-input:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .email-input::placeholder {
+            color: rgba(224, 224, 224, 0.6);
+        }
+        
+        .signup-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .signup-btn {
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
             border-radius: 6px;
             font-family: 'Orbitron', monospace;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 15px 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            flex: 1;
+            max-width: 120px;
         }
         
-        .continue-btn:hover {
+        .signup-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(65, 105, 225, 0.4);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
+        }
+        
+        .cancel-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            padding: 12px 24px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            flex: 1;
+            max-width: 120px;
+        }
+        
+        .cancel-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        @keyframes modalSlideIn {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.8) translateY(-50px); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1) translateY(0); 
+            }
         }
         
         @keyframes glow {
@@ -445,7 +613,10 @@
                     "You were right, Analyst. The answer wasn't to find one perfect number, but to understand the story each number told. You've saved this mission and secured our future on Averion."
                 </div>
                 <div class="mission-complete">Mission Complete</div>
-                <button class="continue-btn" onclick="restartMission()">New Analysis</button>
+                <div class="button-container">
+                    <button class="continue-btn" onclick="restartMission()">New Analysis</button>
+                    <button class="mission2-btn" onclick="showMission2Signup()">Sign up for Mission 2</button>
+                </div>
             </div>
         </div>
     </div>
@@ -666,6 +837,122 @@
             // Hide cinematic
             document.getElementById('cinematicContainer').style.display = 'none';
         }
+        
+        // ============================================================================
+        // MISSION 2 SIGNUP FUNCTIONS - GOOGLE SHEETS INTEGRATION
+        // ============================================================================
+        // IMPORTANT: Follow the setup guide to configure Google Sheets email collection
+        // 1. Create Google Sheet with headers: Timestamp, Email, Game, Interest
+        // 2. Create Google Apps Script with the provided code
+        // 3. Deploy as Web App and copy the URL
+        // 4. ✅ CONFIGURED: Google Script URL has been set up
+        // ============================================================================
+        function showMission2Signup() {
+            document.getElementById('mission2Modal').style.display = 'flex';
+        }
+        
+        function hideMission2Signup() {
+            document.getElementById('mission2Modal').style.display = 'none';
+        }
+        
+        function submitMission2Signup() {
+            const email = document.getElementById('emailInput').value;
+            
+            if (!email) {
+                alert('Please enter your email address');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.signup-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+            
+            // IMPORTANT: Replace this URL with your Google Apps Script Web App URL
+            const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxnnG5VmN3eS-0e8-Ex5I3EwR4qNP0QX3dvfKEFpCTf3wBKtey7wGGtgdgPACD2eioq/exec';
+            
+            // Create form data for Google Sheets submission
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('game', 'Starfall: The Averion Dilemma');
+            formData.append('interest', 'Mission 2 Notification');
+            
+            // Submit to Google Sheets via Apps Script
+            fetch(googleScriptURL, {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+            .then(data => {
+                if (data.result === 'success') {
+                    // Success message
+                    document.querySelector('.mission2-content').innerHTML = `
+                        <div class="mission2-title">Mission Accepted!</div>
+                        <div class="mission2-description">
+                            Thank you for your interest in Mission 2! We'll notify you at <strong>${email}</strong> when the next statistical adventure is ready for deployment.
+                            <br><br>
+                            <em>Keep exploring the universe of data analysis, Analyst!</em>
+                            <br><br>
+                            <small style="opacity: 0.7;">Your signup has been recorded in our mission database.</small>
+                        </div>
+                        <button class="signup-btn" onclick="hideMission2Signup()">Continue Mission</button>
+                    `;
+                } else {
+                    throw new Error(data.error || 'Submission failed');
+                }
+            }).catch(error => {
+                // Reset button state
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                
+                alert('There was an error submitting your email. Please try again later.');
+                console.error('Error:', error);
+            });
+        }
+        
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        // Close modal when clicking outside
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('mission2Modal');
+            if (event.target === modal) {
+                hideMission2Signup();
+            }
+        });
     </script>
+    
+    <!-- Mission 2 Signup Modal -->
+    <div id="mission2Modal" class="mission2-modal">
+        <div class="mission2-content">
+            <div class="mission2-title">Mission 2: Advanced Statistics Awaits!</div>
+            <div class="mission2-description">
+                Ready for your next statistical adventure? Join thousands of analysts exploring advanced concepts like variance, correlation, and predictive modeling in our upcoming mission.
+                <br><br>
+                Enter your email to be notified when <strong>Mission 2</strong> launches!
+            </div>
+            <form class="email-form" onsubmit="event.preventDefault(); submitMission2Signup();">
+                <input 
+                    type="email" 
+                    id="emailInput" 
+                    class="email-input" 
+                    placeholder="your.email@domain.com" 
+                    required
+                    autocomplete="email"
+                >
+                <div class="signup-buttons">
+                    <button type="submit" class="signup-btn">Join Mission</button>
+                    <button type="button" class="cancel-btn" onclick="hideMission2Signup()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
