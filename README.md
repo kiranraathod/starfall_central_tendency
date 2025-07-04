@@ -10,6 +10,8 @@
 
 Jump into the full experience and help 50,000 colonists settle a new world using the power of statistical reasoning.
 
+![Starfall: The Averion Dilemma - Interactive educational game for learning statistics](assets/Starfall_TheAverionDilemma.gif)
+
 ---
 
 ### What You’ll Learn

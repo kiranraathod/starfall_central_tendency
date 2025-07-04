@@ -343,6 +343,65 @@
             </div>
             <button class="continue-btn" onclick="proceedToMission(); return false;">Begin Analysis</button>
         </div>
+        
+        <!-- Ship Systems Modal -->
+        <div id="shipSystemsModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(135, 206, 235, 0.6); color: #e0e0e0; font-family: 'Orbitron', monospace; max-width: 600px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
+            <div class="briefing-header" style="color: #d4af37; font-size: 1.3rem; font-weight: 600; margin-bottom: 30px; text-shadow: 0 0 10px rgba(212, 175, 55, 0.8); letter-spacing: 0.1em;">SHIP SYSTEMS STATUS</div>
+            <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
+                <span style="color: #d4af37; font-weight: 500;">Statistical Analysis Module:</span> <span style="color: #00ff00;">ONLINE</span><br>
+                <span style="color: #d4af37; font-weight: 500;">Data Processing Core:</span> <span style="color: #00ff00;">ACTIVE</span><br>
+                <span style="color: #d4af37; font-weight: 500;">Colony Planning AI:</span> <span style="color: #ffff00;">STANDBY</span><br>
+                <span style="color: #d4af37; font-weight: 500;">Odyssey Main Computer:</span> <span style="color: #00ff00;">OPERATIONAL</span>
+            </div>
+            <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
+                All systems ready for mission deployment
+            </div>
+            <button class="continue-btn" onclick="closeModal('shipSystemsModal'); return false;" style="background: linear-gradient(45deg, #d4af37, #ffd700); color: #000; border: none; padding: 12px 30px; border-radius: 6px; font-family: 'Orbitron', monospace; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);">Close</button>
+        </div>
+        
+        <!-- Colonial Database Modal -->
+        <div id="colonialDatabaseModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(135, 206, 235, 0.6); color: #e0e0e0; font-family: 'Orbitron', monospace; max-width: 600px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
+            <div class="briefing-header" style="color: #d4af37; font-size: 1.3rem; font-weight: 600; margin-bottom: 30px; text-shadow: 0 0 10px rgba(212, 175, 55, 0.8); letter-spacing: 0.1em;">COLONIAL DATABASE</div>
+            <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
+                <span style="color: #d4af37; font-weight: 500;">Planet:</span> Averion<br>
+                <span style="color: #d4af37; font-weight: 500;">Classification:</span> Terrestrial<br>
+                <span style="color: #d4af37; font-weight: 500;">Atmosphere:</span> Breathable (Earth-like)<br>
+                <span style="color: #d4af37; font-weight: 500;">Gravity:</span> 0.98G<br>
+                <span style="color: #d4af37; font-weight: 500;">Day Length:</span> 26.3 Earth hours<br>
+                <span style="color: #d4af37; font-weight: 500;">Suitable for human colonization:</span> <span style="color: #00ff00;">CONFIRMED</span>
+            </div>
+            <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
+                Resource analysis required for optimal settlement locations
+            </div>
+            <button class="continue-btn" onclick="closeModal('colonialDatabaseModal'); return false;" style="background: linear-gradient(45deg, #d4af37, #ffd700); color: #000; border: none; padding: 12px 30px; border-radius: 6px; font-family: 'Orbitron', monospace; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);">Close</button>
+        </div>
+        
+        <!-- Mission Briefing Info Modal -->
+        <div id="missionBriefingInfoModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(135, 206, 235, 0.6); color: #e0e0e0; font-family: 'Orbitron', monospace; max-width: 700px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
+            <div class="briefing-header" style="color: #d4af37; font-size: 1.3rem; font-weight: 600; margin-bottom: 30px; text-shadow: 0 0 10px rgba(212, 175, 55, 0.8); letter-spacing: 0.1em;">MISSION BRIEFING</div>
+            <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
+                The Odyssey carries <span style="color: #d4af37; font-weight: 500;">50,000 colonists</span> in cryogenic sleep. Your analysis of resource distribution data will determine suitable landing sites and ensure colony survival.
+            </div>
+            <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
+                Use statistical methods including <span style="color: #d4af37; font-weight: 500;">measures of central tendency</span> to interpret sensor data from Averion's surface.
+            </div>
+            <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
+                <span style="color: #d4af37; font-weight: 500;">Mission Objective:</span> Apply data science principles for optimal colony placement
+            </div>
+            <button class="continue-btn" onclick="closeModal('missionBriefingInfoModal'); return false;" style="background: linear-gradient(45deg, #d4af37, #ffd700); color: #000; border: none; padding: 12px 30px; border-radius: 6px; font-family: 'Orbitron', monospace; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);">Close</button>
+        </div>
+        
+        <!-- Exit Confirmation Modal -->
+        <div id="exitConfirmationModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(255, 100, 100, 0.6); color: #e0e0e0; font-family: 'Orbitron', monospace; max-width: 500px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
+            <div class="briefing-header" style="color: #ff6b6b; font-size: 1.3rem; font-weight: 600; margin-bottom: 30px; text-shadow: 0 0 10px rgba(255, 107, 107, 0.8); letter-spacing: 0.1em;">⚠️ EXIT TO ORBITAL STATIONS</div>
+            <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
+                Are you sure you want to exit the mission?
+            </div>
+            <div style="display: flex; gap: 20px; justify-content: center;">
+                <button onclick="confirmExit(); return false;" style="background: linear-gradient(45deg, #ff4444, #ff6666); color: #fff; border: none; padding: 12px 24px; border-radius: 6px; font-family: 'Orbitron', monospace; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 68, 68, 0.4);">Exit Mission</button>
+                <button onclick="closeModal('exitConfirmationModal'); return false;" style="background: linear-gradient(45deg, #d4af37, #ffd700); color: #000; border: none; padding: 12px 24px; border-radius: 6px; font-family: 'Orbitron', monospace; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);">Continue Mission</button>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -704,21 +763,39 @@
         }
         
         function showCredits() {
-            alert('MISSION BRIEFING\n\nThe Odyssey carries 50,000 colonists in cryogenic sleep. Your analysis of resource distribution data will determine suitable landing sites and ensure colony survival.\n\nUse statistical methods including measures of central tendency to interpret sensor data from Averion\'s surface.\n\nMission Objective: Apply data science principles for optimal colony placement');
+            showModal('missionBriefingInfoModal');
         }
         
         function showSettings() {
-            alert('SHIP SYSTEMS STATUS\n\nStatistical Analysis Module: ONLINE\nData Processing Core: ACTIVE\nColony Planning AI: STANDBY\nOdyssey Main Computer: OPERATIONAL\n\nAll systems ready for mission deployment');
+            showModal('shipSystemsModal');
         }
         
         function showDatabank() {
-            alert('COLONIAL DATABASE\n\nPlanet: Averion\nClassification: Terrestrial\nAtmosphere: Breathable (Earth-like)\nGravity: 0.98G\nDay Length: 26.3 Earth hours\nSuitable for human colonization: CONFIRMED\n\nResource analysis required for optimal settlement locations');
+            showModal('colonialDatabaseModal');
+        }
+        
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 50);
+        }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
         }
         
         function exitGame() {
-            if (confirm('Exit to orbital stations? Your mission data will be saved.')) {
-                window.close();
-            }
+            showModal('exitConfirmationModal');
+        }
+        
+        function confirmExit() {
+            window.close();
         }
         
         // Handle window resize
