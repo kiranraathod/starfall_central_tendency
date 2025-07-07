@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Starfall: The Averion Dilemma</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Orbitron:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Orbitron:wght@300;400;500;700&family=Oxanium:wght@600&display=swap');
         
         body {
             margin: 0;
             padding: 0;
             background: #000;
             overflow: hidden;
-            font-family: 'Orbitron', monospace;
+            font-family: 'Oxanium', sans-serif;
+            font-weight: 600;
             cursor: none;
         }
         
@@ -145,7 +146,8 @@
             border-radius: 15px;
             border: 2px solid rgba(135, 206, 235, 0.6);
             color: #e0e0e0;
-            font-family: 'Orbitron', monospace;
+            font-family: 'Oxanium', sans-serif;
+            font-weight: 600;
             max-width: 800px;
             text-align: center;
             opacity: 0;
@@ -156,6 +158,8 @@
         }
         
         .story-text {
+            font-family: 'Oxanium', sans-serif;
+            font-weight: 600;
             font-size: 1.1rem;
             line-height: 1.8;
             margin-bottom: 30px;
@@ -199,7 +203,8 @@
             border-radius: 15px;
             border: 2px solid rgba(135, 206, 235, 0.6);
             color: #e0e0e0;
-            font-family: 'Orbitron', monospace;
+            font-family: 'Oxanium', sans-serif;
+            font-weight: 600;
             max-width: 800px;
             text-align: center;
             opacity: 0;
@@ -345,7 +350,7 @@
         </div>
         
         <!-- Ship Systems Modal -->
-        <div id="shipSystemsModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(135, 206, 235, 0.6); color: #e0e0e0; font-family: 'Orbitron', monospace; max-width: 600px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
+        <div id="shipSystemsModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(135, 206, 235, 0.6); color: #e0e0e0; font-family: 'Oxanium', sans-serif; font-weight: 600; max-width: 600px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
             <div class="briefing-header" style="color: #d4af37; font-size: 1.3rem; font-weight: 600; margin-bottom: 30px; text-shadow: 0 0 10px rgba(212, 175, 55, 0.8); letter-spacing: 0.1em;">SHIP SYSTEMS STATUS</div>
             <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
                 <span style="color: #d4af37; font-weight: 500;">Statistical Analysis Module:</span> <span style="color: #00ff00;">ONLINE</span><br>
@@ -360,7 +365,7 @@
         </div>
         
         <!-- Colonial Database Modal -->
-        <div id="colonialDatabaseModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(135, 206, 235, 0.6); color: #e0e0e0; font-family: 'Orbitron', monospace; max-width: 600px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
+        <div id="colonialDatabaseModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(135, 206, 235, 0.6); color: #e0e0e0; font-family: 'Oxanium', sans-serif; font-weight: 600; max-width: 600px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
             <div class="briefing-header" style="color: #d4af37; font-size: 1.3rem; font-weight: 600; margin-bottom: 30px; text-shadow: 0 0 10px rgba(212, 175, 55, 0.8); letter-spacing: 0.1em;">COLONIAL DATABASE</div>
             <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
                 <span style="color: #d4af37; font-weight: 500;">Planet:</span> Averion<br>
@@ -377,7 +382,7 @@
         </div>
         
         <!-- Mission Briefing Info Modal -->
-        <div id="missionBriefingInfoModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(135, 206, 235, 0.6); color: #e0e0e0; font-family: 'Orbitron', monospace; max-width: 700px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
+        <div id="missionBriefingInfoModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(135, 206, 235, 0.6); color: #e0e0e0; font-family: 'Oxanium', sans-serif; font-weight: 600; max-width: 700px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
             <div class="briefing-header" style="color: #d4af37; font-size: 1.3rem; font-weight: 600; margin-bottom: 30px; text-shadow: 0 0 10px rgba(212, 175, 55, 0.8); letter-spacing: 0.1em;">MISSION BRIEFING</div>
             <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
                 The Odyssey carries <span style="color: #d4af37; font-weight: 500;">50,000 colonists</span> in cryogenic sleep. Your analysis of resource distribution data will determine suitable landing sites and ensure colony survival.
@@ -392,7 +397,7 @@
         </div>
         
         <!-- Exit Confirmation Modal -->
-        <div id="exitConfirmationModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(255, 100, 100, 0.6); color: #e0e0e0; font-family: 'Orbitron', monospace; max-width: 500px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
+        <div id="exitConfirmationModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(0, 0, 0, 0.9); padding: 40px; border-radius: 15px; border: 2px solid rgba(255, 100, 100, 0.6); color: #e0e0e0; font-family: 'Oxanium', sans-serif; font-weight: 600; max-width: 500px; text-align: center; opacity: 0; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); display: none; transition: opacity 0.5s ease-in-out;">
             <div class="briefing-header" style="color: #ff6b6b; font-size: 1.3rem; font-weight: 600; margin-bottom: 30px; text-shadow: 0 0 10px rgba(255, 107, 107, 0.8); letter-spacing: 0.1em;">⚠️ EXIT TO ORBITAL STATIONS</div>
             <div class="briefing-text" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
                 Are you sure you want to exit the mission?
