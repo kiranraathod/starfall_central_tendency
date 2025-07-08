@@ -233,6 +233,21 @@
             font-weight: 700;
         }
         
+        .formula {
+            background: rgba(65, 105, 225, 0.25);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            margin: 15px 0;
+            border: 2px solid rgba(65, 105, 225, 0.6);
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        
         .quiz-container {
             background: rgba(0, 0, 0, 0.95);
             border: 2px solid rgba(255, 100, 100, 0.8);
@@ -700,12 +715,21 @@
                 <p>Finding the Middle Value</p>
             </div>
             <div class="tutorial-content">
-                <p>The <strong>MEDIAN</strong> is the middle value in a dataset that has been ordered from least to greatest. It's the exact midpoint of the data.</p>
+                <p>The <strong>MEDIAN</strong> is the middle value in a dataset that has been ordered from least to greatest. It's the exact midpoint of the data and is resistant to extreme values (outliers).</p>
+                
+                <div class="formula">
+                    Median (n = odd number):<br>
+                    Median = [(n+1)/2]<sup>th</sup> term
+                </div>
+                
                 <div class="ordered-data">
                     <p><strong>Ordered Crystal Coordinates:</strong></p>
                     <p>[1km, 2km, 4km, 5km, <span class="median-highlight">7km</span>, 12km, 14km, 15km, 30km]</p>
                     <br>
-                    <p><strong>Median = 7km</strong> (5th value out of 9 total)</p>
+                    <p><strong>Step 1:</strong> Count total values: n = 9</p>
+                    <p><strong>Step 2:</strong> Find position: (9+1)/2 = 5th position</p>
+                    <p><strong>Step 3:</strong> Median = 5th value = 7km</p>
+                    <br>
                     <p>4 values below, 4 values above = perfect middle!</p>
                 </div>
             </div>
@@ -719,7 +743,7 @@
             <div class="quiz-header">
                 <h3>⚔️ CONFLICT ANALYSIS ⚔️</h3>
                 <div class="quiz-question">
-                    Juno proposes the <strong>median</strong> location to be fair to her pilots. What critical information does her purely logistical viewpoint ignore?
+                    Juno proposes the <strong>median</strong> location to be fair to her pilots and resistant to extreme values. Find the median coordinate from the ordered list. What critical information does her purely logistical viewpoint ignore?
                 </div>
             </div>
             
@@ -735,7 +759,7 @@
                 </button>
                 <button class="quiz-option" onclick="selectAnswer('B')">
                     <span class="option-letter">B)</span>
-                    The median doesn't care if the richest crystals are at the 1km mark or the 30km mark.
+                    The median is resistant to extreme values but doesn't consider the magnitude or importance of those values.
                 </button>
                 <button class="quiz-option" onclick="selectAnswer('C')">
                     <span class="option-letter">C)</span>

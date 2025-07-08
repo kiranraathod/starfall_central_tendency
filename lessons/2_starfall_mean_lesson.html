@@ -574,7 +574,7 @@
                 <div>
                     <div class="character-name">Commander Rostova</div>
                     <div class="dialogue-text">
-                        Analyst, look. We need to build our base near these power crystals. I've calculated the perfect spot—the exact mathematical center of all the deposits.
+                        Analyst, report to the bridge. We have a decision to make. Our ground-penetrating scans have located multiple deposits of Helios Crystals in the Rhea Valley below. These crystals are the key to our survival—our primary power source. I have used our advanced systems to calculate the precise mathematical center of all known deposits. This will be the location of our one and only base camp.
                     </div>
                 </div>
             </div>
@@ -592,7 +592,7 @@
                 <div>
                     <div class="character-name">Commander Rostova</div>
                     <div class="dialogue-text">
-                        It's the most efficient location, Juno. It's the <strong style="color: #d4af37;">mean</strong>—the average position of all known resources.
+                        It is the most efficient location, Juno. The math is unequivocal. It is the <strong style="color: #d4af37;">mean</strong> position of all the resources. The average distance to every crystal deposit is minimized from this single point.
                     </div>
                 </div>
             </div>
@@ -626,21 +626,21 @@
             <div class="quiz-header">
                 <h3>CRITICAL THINKING REQUIRED</h3>
                 <div class="quiz-question">
-                    The Commander's math is correct, and the base is at the <strong>mean</strong> location. So why is this a terrible idea?
+                    Commander Rostova's calculation for the base camp is mathematically perfect, placing it at the <strong>mean</strong> location of all crystal deposits. Why does Pilot Juno call this data-driven solution 'The Crater of Doom'?
                 </div>
             </div>
             <div class="quiz-options">
                 <button class="quiz-option" onclick="selectAnswer('A')">
                     <span class="option-letter">A)</span>
-                    The Commander's math must be wrong.
+                    Because the math is wrong.
                 </button>
                 <button class="quiz-option" onclick="selectAnswer('B')">
                     <span class="option-letter">B)</span>
-                    The 'average' spot can be empty or dangerous.
+                    Because the mean location ignores critical factors like terrain safety and buildability.
                 </button>
                 <button class="quiz-option" onclick="selectAnswer('C')">
                     <span class="option-letter">C)</span>
-                    Juno just wants to go somewhere else.
+                    Because Juno prefers a different location.
                 </button>
             </div>
             
@@ -728,8 +728,8 @@
                 options[1].classList.add('correct');
                 feedbackText.innerHTML = `
                     <h4 style="color: #00ff00; margin-top: 0;">✅ Correct!</h4>
-                    <p><strong>B.</strong> The mean finds the mathematical center, but that location isn't always a practical or safe place to be! This means we have to find a better way to solve our problem.</p>
-                    <p>The <strong>mean</strong> is useful for finding the mathematical center, but in real-world applications, we must consider context and safety. Sometimes the "average" location is the worst possible choice!</p>
+                    <p><strong>B.</strong> The mean provides a mathematically optimal center for minimizing distances, but it doesn't guarantee that this center is a safe or practical location.</p>
+                    <p>Mathematical precision must be balanced with real-world constraints like terrain, safety, and buildability. The <strong>mean</strong> is mathematically perfect but can be practically useless!</p>
                 `;
                 feedback.classList.add('correct');
             } else {
@@ -748,7 +748,7 @@
                 feedbackText.innerHTML = `
                     <h4 style="color: #ff4444; margin-top: 0;">❌ Not quite right</h4>
                     <p>${explanation}</p>
-                    <p><strong>The correct answer is B.</strong> The mean finds the mathematical center, but that location isn't always practical or safe! Sometimes the "average" location is the worst possible choice.</p>
+                    <p><strong>The correct answer is B.</strong> The mean provides a mathematically optimal center for minimizing distances, but it doesn't guarantee that this center is a safe or practical location. Mathematical precision must be balanced with real-world constraints.</p>
                 `;
                 feedback.classList.add('incorrect');
             }
