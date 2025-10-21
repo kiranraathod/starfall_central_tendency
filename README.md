@@ -6,7 +6,7 @@
 
 ## 🌟 Demo
 
-[🎮 Play Starfall: The Averion Dilemma](https://kiranraathod.github.io/starfall_central_tendency/)
+[🎮 Play Starfall: The Averion Dilemma](**https://kiranraathod.github.io/starfall_central_tendency/**)
 
 Jump into the full experience and help 50,000 colonists settle a new world using the power of statistical reasoning.
 
@@ -96,6 +96,43 @@ starfall-central-tendency/
 |
 └── README.md                   # This file
 ```
+
+---
+
+## 💻 How to Run Locally
+
+Follow these steps to run **Starfall: The Averion Dilemma** on your local machine:
+
+1. **Clone the Repository:**
+   
+   Open your terminal or command prompt and run:
+   ```bash
+   git clone https://github.com/kiranraathod/starfall_central_tendency.git
+   ```
+
+2. **Navigate to the Project Directory:**
+   
+   ```bash
+   cd starfall_central_tendency
+   ```
+
+3. **Open the Game:**
+   
+   Locate the `index.html` file in the project root directory and open it with your preferred web browser. You can do this by:
+   - Double-clicking the `index.html` file, or
+   - Right-clicking the file and selecting "Open with" followed by your browser, or
+   - Using the terminal command (example for some systems):
+     ```bash
+     open index.html        # macOS
+     start index.html       # Windows
+     xdg-open index.html    # Linux
+     ```
+
+4. **Start Playing:**
+   
+   The game launcher will appear in your browser. Select a lesson and begin your journey through the Averion Dilemma!
+
+**Note:** This is a static web project, so no additional dependencies or build steps are required. Simply open the HTML file and start learning!
 
 ---
 
